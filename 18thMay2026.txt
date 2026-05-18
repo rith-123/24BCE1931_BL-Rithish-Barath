@@ -1,0 +1,144 @@
+show databases;
+
+use vitcampus;
+
+show tables from vitcampus;
+
+select * from cse;
+
+desc cse;
+
+ALTER TABLE cse ADD (
+	sdept varchar(30)
+);
+
+INSERT INTO cse values (105,"Tamil",99,"cse");
+
+ALTER TABLE cse ADD (
+	sphn1 int ,
+    sph2 int
+);
+
+ALTER TABLE cse
+DROP sphn1,
+DROP sph2;
+
+ALTER TABLE cse ADD (
+	sCountry varchar(30) DEFAULT 'India'
+);
+
+INSERT INTO cse VALUES (
+	106,"Semi",93,"cse","Sri Lanka"
+);
+
+ALTER TABLE cse RENAME COLUMN 
+	sCountry to sLocation;
+
+select * from eee;
+
+TRUNCATE TABLE eee;
+
+DELETE FROM eee;
+
+desc eee;
+
+DROP TABLE eee;
+
+
+CREATE TABLE Worker (
+	WORKER_ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	FIRST_NAME CHAR(25),
+	LAST_NAME CHAR(25),
+	SALARY INT(15),
+	JOINING_DATE DATETIME,
+	DEPARTMENT CHAR(25)
+);
+
+INSERT INTO Worker 
+	(WORKER_ID, FIRST_NAME, LAST_NAME, SALARY, JOINING_DATE, DEPARTMENT) VALUES
+		(001, 'Monika', 'Arora', 100000, '14-02-20 09.00.00', 'HR'),
+		(002, 'Niharika', 'Verma', 80000, '14-06-11 09.00.00', 'Admin'),
+		(003, 'Vishal', 'Singhal', 300000, '14-02-20 09.00.00', 'HR'),
+		(004, 'Amitabh', 'Singh', 500000, '14-02-20 09.00.00', 'Admin'),
+		(005, 'Vivek', 'Bhati', 500000, '14-06-11 09.00.00', 'Admin'),
+		(006, 'Vipul', 'Diwan', 200000, '14-06-11 09.00.00', 'Account'),
+		(007, 'Satish', 'Kumar', 75000, '14-01-20 09.00.00', 'Account'),
+		(008, 'Geetika', 'Chauhan', 90000, '14-04-11 09.00.00', 'Admin');
+        
+select * from Worker;
+
+UPDATE Worker SET FIRST_NAME = "Jayanth",Last_name = "V" 
+WHERE WORKER_ID = 1;
+
+UPDATE Worker SET SALARY = SALARY + 1000;
+
+DELETE FROM Worker 
+WHERE WORKER_ID = 8;
+
+start transaction;
+
+create table emp(id int);
+insert into emp values (101);
+select * from emp;
+
+savepoint time15;
+
+insert into emp values (102);
+
+savepoint time16;
+
+select * from emp;
+
+insert into emp values (103);
+savepoint time17;
+
+ROLLBACK to time17;
+
+insert into emp values (104);
+savepoint time18;
+
+Rollback to time17;
+
+select * from emp;
+
+select * from worker;
+
+select first_name,last_name,department from worker
+where worker_id = 1;
+
+select first_name,last_name,department from worker
+where salary > 100000;
+
+select first_name,last_name,department from worker
+where salary < 100000 and department = "admin";
+
+
+select first_name,last_name,department,salary from worker
+where salary < 100000 or department = "admin";
+
+# Comparator Operators
+
+# 1.equal operator, = 
+select first_name,last_name,department,salary from worker
+where department = "hr";
+
+# 2.not equal operator, != 
+select first_name,last_name,department,salary from worker
+where department != "admin";
+
+# 3.greater than operator, > 
+select first_name,last_name,department,salary from worker
+where salary > 100000;
+
+# 4.lesser than operator, <
+select first_name,last_name,department,salary from worker
+where salary < 100000; 
+
+# 5.greater than or equalt to operator, >= 
+select first_name,last_name,department,salary from worker
+where salary >= 300000;
+
+# 6.lesser than or equal to, <= 
+select first_name,last_name,department,salary from worker
+where salary <= 300000;
+
