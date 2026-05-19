@@ -1,0 +1,197 @@
+show databases;
+
+use vitcampus;
+
+show tables from vitcampus;
+
+select * from worker;
+
+desc worker;
+
+# Logical Operators
+
+# AND
+select first_name, last_name,department, salary from worker
+where department = "admin" and salary > 100000;
+
+# OR
+select first_name, last_name,department, salary from worker
+where department = "admin" or salary > 100000;
+
+select first_name, last_name,department, salary from worker
+where worker_id = 1 or worker_id = 7;
+
+# IN Operator (to avoid bif lines of code in case of large querry involving or operaotr)
+select worker_id, first_name, last_name, salary from worker
+where worker_id  in (1,7);
+
+# Not in operator
+select worker_id, first_name, last_name, salary from worker
+where worker_id  not in (1,7);
+
+# Between Operator  (between takes range inclusive)
+select worker_id, first_name, last_name, department, salary from worker
+where salary between 100000 and 300000;
+
+select worker_id, first_name, last_name, department, salary from worker
+where salary between 101000 and 300000;
+
+select worker_id, first_name, last_name, department, salary from worker
+where salary not between 101000 and 300000;
+
+select * from worker
+where salary between 100000 and 500000
+and department not in ('hr','admin');
+
+# Work out - Excercise : And, Or, In, Not IN, mix
+
+# 1. And operator
+select worker_id, first_name, last_name, department, salary from worker
+where department = "admin" and salary > 500000;
+
+# 2. Or operator
+select worker_id, first_name, last_name, department, salary from worker
+where department = 'hr' or department = 'admin';
+
+# 3. In operaqtor
+select worker_id, first_name, last_name, department, salary from worker
+where first_name in ('vipul','vishal','sathish');
+
+# 4. Not in operator
+select worker_id, first_name, last_name, department, salary from worker
+where department = "admin" and salary > 500000;
+
+# 5. mix of And with In and Not In operator
+select worker_id, first_name, last_name, department, salary from worker
+where department in ('admin','account')
+and first_name not in ('vipul','vivek');
+
+# 6. mix of Or with In and Not in operator
+select worker_id, first_name, last_name, department, salary from worker
+where department = 'hr'
+or first_name in ('vipul','satish') and last_name not in ('singh');
+
+
+select * from worker;
+
+# Like operator (% to match zero , one or more charcters , _ to amtch single character)
+select worker_id, first_name, last_name, department, salary from worker
+where first_name like 'j%';
+
+select worker_id, first_name, last_name, department, salary from worker
+where first_name like 'v%i';
+
+select worker_id, first_name, last_name, department, salary from worker
+where first_name like '_i__%';
+
+select worker_id, first_name, last_name, department, salary from worker
+where first_name like '_i__a%';
+
+# Work out - Excercise : Like operator with differnt % adn _ characters
+
+# 1.First name starts with v
+select worker_id, first_name, last_name, department, salary from worker
+where first_name like 'v%';
+
+# 2.First name starts with v and exactly has 5 characters
+select worker_id, first_name, last_name, department, salary from worker
+where first_name like 'v____';
+
+# 3. First name starts wth v and have v later in name and can have any chaacters in name after that
+select worker_id, first_name, last_name, department, salary from worker
+where first_name like 'v_%v%';
+
+# where clause is not used while aggregte functions , for that we use having clause
+
+
+# Aggregate Functions
+
+# min, max
+select min(salary) from worker;
+
+select min(salary) from worker
+where department = 'admin';
+
+select min(salary) from worker
+where department = 'hr';
+
+select max(salary) from worker
+where department = 'hr';
+
+# count
+select count(*) from worker;
+
+select count(*) from worker
+where department = 'admin';
+
+select sum(salary) from worker
+where department = 'admin';
+
+select count(*) from worker
+where department = 'hr';
+
+# Question : person from admin dept , person gets less salary and if found there name should not begin with a
+select first_name, last_name, department, min(salary) from worker
+where department = 'admin' and first_name not like '%a%';
+
+
+# Work out - Excercise : Aggregate Functions
+
+# 1. min() : Find the minimum salary among workers whose first name starts with 'V'.
+select min(salary) from worker
+where first_name like 'v%';
+
+# 2. max() : Find the highest salary among workers in the 'Account' department.
+select max(salary) from worker
+where department = 'account';
+
+# 3. count() : Find the number of workers whose salary is greater than 100000.
+select count(*) from worker
+where salary > 100000;
+
+# 4. sum() : Find the total salary of workers in the 'HR' department.
+select sum(salary) from worker
+where department = 'hr';
+
+# 5. avg() : Find the average salary of workers who belong to 'Admin' department and whose salary is greater than 200000.
+select avg(salary) from worker
+where department = 'admin' and salary > 200000;
+
+# alias : 1) Display worker first names with the column name as EMPLOYEE_NAME.
+select first_name as employee_name, department, salary from worker;
+
+# 2) Display the total salary of all workers with column name TOTAL_SALARY.
+select sum(salary) as total_salary from worker;
+
+# union
+select first_name, department from worker
+where department = 'hr'
+
+union
+
+select first_name, department from worker
+where department = 'admin';
+
+# case
+select first_name, last_name, department, salary, 
+	case
+		when salary >= 500000 then 'High Salary'
+        when salary >= 100000 then 'Moderate Salary'
+        else 'Low Salary'
+	end as 'Salary_Status'
+from worker;
+
+# view
+create view minSalaryAdmin as select min(salary) from worker 
+where department = 'admin';
+
+create view maxSalaryAdmin as select max(salary) from worker
+where department = 'admin';
+
+select * from minSalaryAdmin;
+
+select * from maxSalaryAdmin;
+
+
+
+
