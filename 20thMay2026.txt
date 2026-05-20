@@ -1,0 +1,110 @@
+# unique,default, check - numeric based own constraint or value that can only fit in that column
+# key - primary and foriegn
+show databases;
+
+use vitcampus;
+show tables from vitcampus;
+
+create table persons (
+	id int not null,
+    lastName varchar(255) not null,
+    firstName varchar(255) not null,
+    age int
+);
+
+desc persons;
+select * from persons;
+
+insert into persons values(101,'v','Jayanth',42);
+
+insert into persons values(102,'s','Shubham',null);
+
+insert into persons values(null,'a','krunal',33);
+
+alter table persons
+add unique (id);
+
+alter table persons
+add unique (age);
+
+# checking whther unique values are accepted
+insert into persons values(103,'m','agarwal',34);
+insert into persons values(104,'r','sharma',34);
+
+alter table persons
+drop constraint age;
+
+alter table persons
+modify 
+age int not null 
+check (age >= 18 and age <= 42);
+
+delete from persons
+where age is null;
+
+insert into persons values(105,'v','kohli',39);
+delete from persons 
+where firstname = 'dhoni';
+insert into persons values(106,'ms','dhoni',44);
+
+# default
+create table persons1 (
+	id int not null unique,
+    lastName varchar(255) not null,
+    firstName varchar(255) not null,
+    city varchar(255) not null default 'Indore'
+);
+desc persons1;
+
+create table products (
+	pid int primary key,
+    pname varchar(255) not null,
+    prefno int not null
+);
+desc products;
+select * from products;
+
+insert into products values(101,'Makeup',19928);
+insert into products values(102,'Toys',19923);
+insert into products values(102,'Utensils',19945);
+
+alter table products
+add unique(prefno);
+
+alter table products
+drop primary key;
+
+alter table products
+add primary key (pid);
+
+# foreign keys and linking
+drop table products;
+
+create table category (
+	cid int primary key,
+    cname varchar(100) not null
+);
+desc category;
+
+select * from category;
+insert into category values(101,'Electronics');
+insert into category values(105,'Home App');
+
+create table products (
+	pid int primary key,
+    pname varchar(100) not null,
+    prrefno int not null unique,
+    cid int,
+    foreign key (cid) references category (cid)
+);
+desc products;
+
+insert into products values(101,'Hair Dryer',19932,101);
+insert into products values(102,'Power Bank',19933,101);
+insert into products values(103,'Wooden Chair',19938,105);
+
+insert into products values(107,'Ponds Moisturizer',19943,103);
+
+select * from products;
+
+
