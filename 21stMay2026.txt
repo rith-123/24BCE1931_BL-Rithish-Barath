@@ -1,0 +1,153 @@
+show databases;
+
+use vitcampus;
+
+show tables from vitcampus;
+
+select * from category;
+select * from products;
+
+delete from category 
+where cid = 101;
+
+drop table products;
+
+create table products (
+	pid int primary key,
+    pname varchar(100) not null,
+    prefno int unique not null,
+    cid int,
+    foreign key (cid) references category (cid) on delete cascade
+);
+
+create table products (
+	pid int primary key,
+    pname varchar(100) not null,
+    prefno int unique not null,
+    cid int,
+    foreign key (cid) references category (cid) on update cascade
+);
+
+delete from category
+where cid = 103;
+insert into category values(105,'Home App');
+
+insert into products values(101,'Hair Dryer',19932,101);
+insert into products values(102,'Power Bank',19933,101);
+insert into products values(103,'Wooden Chair',19938,105);
+
+delete from category
+where cid = 105;
+
+update category
+set cid = 103
+where cname = 'Home app';
+
+# where clause does not worker with aggregatge functions
+# for that we use seperate clauses like order by , group by, having
+
+# order by
+select * from worker;
+
+select first_name, department, salary from worker
+where department = 'admin';
+
+select first_name, department, salary from worker
+where department = 'admin'
+order by salary;
+
+select first_name, department, salary from worker
+where department = 'admin'
+order by salary desc;
+
+select count(*) as Total_Workers from worker;
+
+select department, count(department) as Count from worker
+group by department;
+
+select department, count(department) as Count from worker
+group by department
+order by department;
+
+select department, count(department) as Count from worker
+group by department
+order by department desc;
+
+select department, count(department) as Count from worker
+group by department
+order by Count;
+
+select department, count(department) as Count from worker
+group by department
+order by Count desc;
+
+# Class Task : Department Wise - consolidated full salary
+select department, sum(salary) as Amount_Spent from worker
+group by department;
+
+select department, sum(salary) as Amount_Spent from worker
+group by department
+order by Amount_Spent;
+
+# Class Task : Sum Salary < 3 lakh
+select department, sum(salary) as Amount_spent from worker
+group by department
+having Amount_spent < 300000;
+
+select * from worker;
+
+# limit
+select * from worker
+limit 5;
+
+select * from worker
+limit 3;
+
+# limit and offeset 
+select * from worker
+limit 1 offset 3;
+
+select * from worker
+limit 3 offset 3;
+
+select * from worker
+limit 3 offset 4;
+
+# subquerry
+create table toppers (
+	id int
+);
+insert into toppers values
+(2),
+(7);
+
+select * from toppers;
+
+select worker_id,first_name, department, salary from worker
+where worker_id in (
+	select id from toppers
+);
+
+# Class Task : Question 1 : The departments which are accumulating the least salary , but first two
+select department, sum(salary) as Amount_spent from worker
+group by department
+order by Amount_spent
+limit 2;
+
+# Class Task : Question 2 : In admin department , the person get second largest salary
+select first_name, department, salary from worker
+where department = 'admin'
+order by salary desc
+limit 1 offset 1;
+
+select * from worker;
+# Class Task : Question 3 : Each department , print the second largest salray person
+select first_name, department, salary
+from worker w1
+where salary = (
+    select distinct salary
+    from worker w2
+    where w1.department = w2.department
+    order by salary desc
+    limit 1 offset 1
+);
