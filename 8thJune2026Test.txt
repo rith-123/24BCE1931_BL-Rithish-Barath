@@ -1,0 +1,278 @@
+MONGODB Test
+
+NAME : B L Rithish Barath
+REGNO : 24BCE1931
+DATE : 08-06-2026
+
+
+Questions
+
+
+
+
+
+1. Find all students from the CS department with marks greater than 80.
+
+Query :
+
+db.Students.find({
+  dept : "CS",
+  marks : {$gt : 80}
+} , {})
+
+
+
+
+
+2. Find students whose marks are between 60 and 85 (inclusive) using $gte and $lte.
+
+Query :
+
+db.Students.find({
+  marks : {
+    $gte : 60,
+    $lte : 85
+  }
+} , {})
+
+
+
+
+
+3. Find all students who are either from IT or ECE department using $in operator.
+
+Query :
+
+db.Students.find({
+  dept : {
+    $in : ["IT","ECE"]
+  }
+} , {})
+
+
+
+
+
+4. Find students NOT in the CS department using $nin and project only name and dept.
+
+Query :
+
+db.Students.find({
+  dept : {
+    $nin : ["CS"]
+  }
+} , {name : 1 , dept : 1 , _id : 0})
+
+
+
+
+
+5. Find students where the address.city is 'Chennai' using dot notation.
+
+Query :
+
+db.Students.find({
+  "address.city" : "Chennai"
+} , {})
+
+
+
+
+
+6. Find total revenue per category using $group and $sum on a computed field (price × sold).
+
+Query :
+
+db.Products.aggregate([
+  {
+    $group : {
+      _id : "$category",
+      revenuePerCategory : {$sum : {$multiply : ["$price","$sold"]}}
+    }
+  },
+  {
+    $project : {
+      category : 1,
+      revenuePerCategory : 1
+    }
+  }
+])
+
+
+
+
+
+7. Use aggregation to find total number of students and average marks per department.
+
+Query :
+
+db.Students.aggregate([
+  {
+    $group : {
+      _id : "$dept",
+      countPerDept : {$count : {}},
+      avgMarksPerDept : {$avg : {$sum : "$marks"}}
+    }
+  },
+  {
+    $project : {
+      dept : 1,
+      countPerDept : 1,
+      avgMarksPerDept : 1
+    }
+  }
+])
+
+
+
+
+
+8. Remove the 'scholarship' field from all students using $unset.
+
+Query :
+
+db.Students.updateMany({} , {$unset : {scholarship : ""}})
+
+
+
+
+
+9. Add a new field 'scholarship' with value false to all CS students using $set.
+
+Query :
+
+db.Students.updateMany({
+  dept : "CS"
+} , {$set : {scholarship : true}})
+
+
+
+
+
+10. Increment marks of student with _id:6 by 10 using $inc.
+
+Query :
+
+db.Students.updateOne({_id : 10} , {$inc : {marks : 10}})
+
+
+
+
+
+11. Find the 3rd and 4th highest scoring students using sort, skip, and limit (pagination).
+
+Query :
+
+db.Students.find({} , {marks : 1 , name : 1}).sort({marks : -1}).skip(2).limit(2)
+
+
+
+
+
+12. Find employees whose salary is greater than 50000 and experience greater than 5.
+
+Query :
+
+db.Employees.find({
+  salary : {$gt : 50000},
+  experience : {$gt : 2}
+} , {})
+
+
+
+
+
+13. Find employees whose skills array size is greater than 2.
+
+Query :
+
+db.Employees.find({
+  $expr : {
+    $gt : [{$size : "$skills"} , 2]
+  }
+} , {})
+
+
+
+
+
+14. Find departments whose average salary is greater than 50000.
+
+Query :
+
+db.Employees.aggregate([
+  {
+    $group : {
+      _id : "$department",
+      avgSalary : {$avg : {$sum : "$salary"}}
+    }
+  },
+  {
+    $match : {
+      avgSalary : {$gt : 50000}
+    }
+  },
+  {
+    $project : {
+      department : 1,
+      avgSalary : 1
+    }
+  }
+])
+
+
+
+
+
+15. Find minimum salary in each department.
+
+Query :
+
+db.Employees.aggregate([
+  {
+    $group : {
+      _id : "$department",
+      minSalary : {$min : "$salary"}
+    }
+  },
+  {
+    $project : {
+      department : 1,
+      minSalary : 1
+    }
+  }
+])
+
+
+
+
+
+16. Rename field city to location.
+
+Query :
+
+db.Employees.updateMany({} , {
+  $rename : {
+    city : "location"
+  }
+})
+
+
+
+
+
+17. Find products where stock is of type Number using $type operator.
+
+Query :
+
+db.Products.find({stock : {$type : "number"}} , {})
+
+
+
+
+
+18. Set the active status to true for all inactive students using updateMany and $set.
+
+Query :
+
+db.Students.updateMany({active : false} , {$set : {active : true}})
