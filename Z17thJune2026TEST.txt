@@ -178,11 +178,6 @@ db.employees.updateOne(
     { $inc: { salary: 5000 } }
 );
 
-To see the updated result:
-
-db.employees.find({ empId: 101 });
-
-
 Q25. Increase salary of all IT employees by 10%
 
 db.employees.updateMany(
@@ -195,7 +190,3 @@ db.employees.updateMany(
         }
     ]
 );
-
-To see the updated result:
-
-db.employees.find({ department: "IT" });
